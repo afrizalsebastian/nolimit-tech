@@ -22,14 +22,13 @@ const AuthMiddleware = async (
     req.user = claims;
     next();
   } catch (err) {
+    let errorValue = err;
     if (err instanceof JsonWebTokenError) {
-      const newErr = new UnauthorizedError('Invalid Token');
-      next(newErr);
+      errorValue = new UnauthorizedError('Invalid Token');
     }
 
     if (err instanceof TokenExpiredError) {
-      const newErr = new UnauthorizedError('Token Expired');
-      next(newErr);
+      errorValue = new UnauthorizedError('Token Expired');
     }
 
     next(err);
