@@ -1,8 +1,8 @@
 module.exports = {
-  
   clearMocks: true,
   preset: 'ts-jest',
   testEnvironment: 'node',
+  testPathIgnorePatterns: ['/node_modules/', '/dist/test/'],
   setupFilesAfterEnv: ['<rootDir>/test/prisma.mock.ts'],
   moduleNameMapper: {
     '^@middlewares/(.*)$': '<rootDir>/src/middlewares/$1',

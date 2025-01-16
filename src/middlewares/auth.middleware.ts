@@ -31,7 +31,7 @@ const AuthMiddleware = async (
       errorValue = new UnauthorizedError('Token Expired');
     }
 
-    next(err);
+    next(errorValue);
   }
 };
 

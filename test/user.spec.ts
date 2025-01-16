@@ -1,5 +1,4 @@
 import { LoginRequest, RegisterRequest } from '@dtos/user.dtos';
-import { User } from '@prisma/client';
 import * as bcrypt from 'bcryptjs';
 import supertest from 'supertest';
 import app from '../src/App';
@@ -9,8 +8,8 @@ describe('POST /api/v1/user/register', () => {
   it('should return error if validation error', async () => {
     const request = {
       email: 1,
-      name: '',
-      password: '',
+      name: 1,
+      password: 1,
     };
 
     const result = await supertest(app)
@@ -44,7 +43,7 @@ describe('POST /api/v1/user/register', () => {
 
   it('should return data id, email, and name if success', async () => {
     const hashedPassword = await bcrypt.hash('password', 10);
-    const dbResponse: User = {
+    const dbResponse = {
       id: 1,
       email: 'user@mail.com',
       password: hashedPassword,
@@ -112,7 +111,7 @@ describe('POST /api/v1/user/login', () => {
 
   it('should return error if password incorrect', async () => {
     const hashedPassword = await bcrypt.hash('password', 10);
-    const dbResponse: User = {
+    const dbResponse = {
       id: 1,
       email: 'user@mail.com',
       password: hashedPassword,
@@ -139,7 +138,7 @@ describe('POST /api/v1/user/login', () => {
 
   it('should return data token if login success', async () => {
     const hashedPassword = await bcrypt.hash('password', 10);
-    const dbResponse: User = {
+    const dbResponse = {
       id: 1,
       email: 'user@mail.com',
       password: hashedPassword,
