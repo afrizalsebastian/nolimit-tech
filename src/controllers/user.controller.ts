@@ -1,11 +1,7 @@
 import { LoginRequest, RegisterRequest } from '@dtos/user.dtos';
-import {
-  BadRequestError,
-  UnauthorizedError,
-} from '@middlewares/errorHandler.middleware';
+import { BadRequestError } from '@middlewares/errorHandler.middleware';
 import { CreateUser, UserLogin } from '@services/user';
 import { NextFunction, Request, Response } from 'express';
-import { JsonWebTokenError, TokenExpiredError } from 'jsonwebtoken';
 import { ZodError } from 'zod';
 
 export async function Register(
@@ -45,10 +41,6 @@ export async function Login(req: Request, res: Response, next: NextFunction) {
     let errorValue = err;
     if (err instanceof ZodError) {
       errorValue = new BadRequestError('Validation Error.');
-    } else if (err instanceof JsonWebTokenError) {
-      errorValue = new UnauthorizedError('Token Invalid');
-    } else if (err instanceof TokenExpiredError) {
-      errorValue = new UnauthorizedError('Token Expired.');
     }
     next(errorValue);
   }
