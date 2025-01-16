@@ -25,3 +25,20 @@ export async function RCreatePost(
     author: result.Author,
   };
 }
+
+export async function RGetPostById(id: number): Promise<PostWithAuthor | null> {
+  const result = await PrismaService.post.findFirst({
+    where: {
+      id: id,
+    },
+    include: {
+      Author: true,
+    },
+  });
+
+  if (!result) return null;
+  return {
+    post: result,
+    author: result.Author,
+  };
+}

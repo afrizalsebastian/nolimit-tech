@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "main": "index.ts",
   "scripts": {
-    "build": "tsc --project tsconfig.json && tsc-alias -p tsconfig.json",
+    "build": "tsc --project tsconfig.prod.json && tsc-alias -p tsconfig.prod.json",
     "start": "node dist/index.js",
     "dev": "nodemon -r tsconfig-paths/register ./index.ts",
     "test": "jest --runInBand"
