@@ -8,8 +8,8 @@ export const Logger = winston.createLogger({
     timestamp({ format: timestampFormat }),
     json(),
     printf(
-      ({ timestamp, level, message, ...data }) =>
-        `[${timestamp}]-[${level}]: ${message}, ${JSON.stringify(data)}`,
+      ({ timestamp, level, message }) =>
+        `[${timestamp}]-[${level}]: ${message}`,
     ),
   ),
 
