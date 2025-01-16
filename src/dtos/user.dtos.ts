@@ -4,8 +4,13 @@ export interface UserResponse {
   email: string;
 }
 
-export interface CreateUserRequest {
+export interface RegisterRequest {
   name: string;
+  email: string;
+  password: string;
+}
+
+export interface LoginRequest {
   email: string;
   password: string;
 }

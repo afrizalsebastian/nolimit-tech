@@ -6,6 +6,6 @@ export interface RouteName {
   router: Router;
 }
 
-const RoutesV1: RouteName[] = [{ name: `/user`, router: UserRoutes }];
+const RoutesV1: RouteName[] = [{ name: `user`, router: UserRoutes }];
 
 export { RoutesV1 };

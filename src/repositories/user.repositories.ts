@@ -1,9 +1,9 @@
 import PrismaService from '@common/prisma.service';
-import { CreateUserRequest } from '@dtos/user.dtos';
+import { RegisterRequest } from '@dtos/user.dtos';
 import { User } from '@prisma/client';
 
 export async function CreateNewUser(
-  userRequest: CreateUserRequest,
+  userRequest: RegisterRequest,
 ): Promise<User> {
   return await PrismaService.user.create({
     data: {
@@ -22,4 +22,12 @@ export async function IsEmailExists(email: string): Promise<boolean> {
       },
     })) > 0
   );
+}
+
+export async function GetUserByEmail(email: string): Promise<User | null> {
+  return await PrismaService.user.findFirst({
+    where: {
+      email: email,
+    },
+  });
 }
