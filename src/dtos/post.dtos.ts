@@ -15,3 +15,9 @@ export interface CreatePostRequest {
   userId: number;
   content: string;
 }
+
+export interface UpdatePostRequest {
+  id: number;
+  userId: number;
+  content: string;
+}

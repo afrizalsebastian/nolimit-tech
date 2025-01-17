@@ -1,11 +1,21 @@
 import { Logger } from '@common/logger.service';
-import { AuthorPost, CreatePostRequest, PostResponse } from '@dtos/post.dtos';
+import {
+  AuthorPost,
+  CreatePostRequest,
+  PostResponse,
+  UpdatePostRequest,
+} from '@dtos/post.dtos';
 import {
   BadRequestError,
   NotFoundError,
 } from '@middlewares/errorHandler.middleware';
 import { Post, User } from '@prisma/client';
-import { RCreatePost, RGetPostById } from '@repositories/post.repositories';
+import {
+  RCreatePost,
+  RGetPostById,
+  RIsPostWithIdAndUserID,
+  RUpdatePost,
+} from '@repositories/post.repositories';
 import { validate } from '@utils/dtosValidation.util';
 import { PostValidation } from './validation';
 
@@ -41,18 +51,44 @@ export async function SCreatePost(
   return toPostResposne(post, author);
 }
 
-export async function SGetPostById(id: string): Promise<PostResponse> {
+export async function SGetPostById(id: number): Promise<PostResponse> {
   Logger.debug(`services.post.SGetPostById`);
 
-  const intId = parseInt(id);
-  if (isNaN(intId)) {
+  if (isNaN(id)) {
     throw new BadRequestError('Path validation error. Only integer accepted');
   }
 
-  const result = await RGetPostById(intId);
+  const result = await RGetPostById(id);
   if (!result) {
-    throw new NotFoundError(`Post with id ${intId} not found.`);
+    throw new NotFoundError(`Post with id ${id} not found.`);
   }
 
   return toPostResposne(result.post, result.author);
+}
+
+export async function SUpdatePost(
+  request: UpdatePostRequest,
+): Promise<PostResponse> {
+  Logger.debug(`services.post.SUpdatePost`);
+
+  if (isNaN(request.id)) {
+    throw new BadRequestError('Path validation error. Only integer accepted');
+  }
+
+  const validRequest: UpdatePostRequest = validate(
+    PostValidation.UPDATE,
+    request,
+  );
+
+  const isPostExist = await RIsPostWithIdAndUserID(
+    validRequest.id,
+    validRequest.userId,
+  );
+
+  if (!isPostExist) {
+    throw new NotFoundError(`Post with id ${validRequest.id} not found.`);
+  }
+
+  const { post, author } = await RUpdatePost(request);
+  return toPostResposne(post, author);
 }

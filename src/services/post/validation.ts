@@ -6,8 +6,9 @@ export class PostValidation {
     content: z.string().min(1),
   });
 
-  static readonly LOGIN: ZodType = z.object({
-    email: z.string().min(1).max(250),
-    password: z.string().min(1),
+  static readonly UPDATE: ZodType = z.object({
+    id: z.number().min(1),
+    userId: z.number().min(1),
+    content: z.string().min(1),
   });
 }
