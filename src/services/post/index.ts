@@ -2,6 +2,7 @@ import { Logger } from '@common/logger.service';
 import {
   AuthorPost,
   CreatePostRequest,
+  DeletePostRequest,
   PostResponse,
   UpdatePostRequest,
 } from '@dtos/post.dtos';
@@ -12,6 +13,7 @@ import {
 import { Post, User } from '@prisma/client';
 import {
   RCreatePost,
+  RDeletePost,
   RGetPostById,
   RIsPostWithIdAndUserID,
   RUpdatePost,
@@ -89,6 +91,24 @@ export async function SUpdatePost(
     throw new NotFoundError(`Post with id ${validRequest.id} not found.`);
   }
 
-  const { post, author } = await RUpdatePost(request);
+  const { post, author } = await RUpdatePost(validRequest);
+  return toPostResposne(post, author);
+}
+
+export async function SDeletePost(
+  request: DeletePostRequest,
+): Promise<PostResponse> {
+  Logger.debug(`services.post.SUpdatePost`);
+
+  if (isNaN(request.id)) {
+    throw new BadRequestError('Path validation error. Only integer accepted');
+  }
+
+  const isPostExist = await RIsPostWithIdAndUserID(request.id, request.userId);
+  if (!isPostExist) {
+    throw new NotFoundError(`Post with id ${request.id} not found.`);
+  }
+
+  const { post, author } = await RDeletePost(request);
   return toPostResposne(post, author);
 }

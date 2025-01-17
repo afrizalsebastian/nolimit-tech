@@ -1,5 +1,9 @@
 import PrismaService from '@common/prisma.service';
-import { CreatePostRequest, UpdatePostRequest } from '@dtos/post.dtos';
+import {
+  CreatePostRequest,
+  DeletePostRequest,
+  UpdatePostRequest,
+} from '@dtos/post.dtos';
 import { Post, User } from '@prisma/client';
 
 export interface PostWithAuthor {
@@ -67,6 +71,25 @@ export async function RUpdatePost(
     },
     data: {
       content: request.content,
+    },
+    include: {
+      Author: true,
+    },
+  });
+
+  return {
+    post: result,
+    author: result.Author,
+  };
+}
+
+export async function RDeletePost(
+  request: DeletePostRequest,
+): Promise<PostWithAuthor> {
+  const result = await PrismaService.post.delete({
+    where: {
+      id: request.id,
+      authorId: request.userId,
     },
     include: {
       Author: true,

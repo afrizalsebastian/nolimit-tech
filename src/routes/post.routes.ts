@@ -1,5 +1,6 @@
 import {
   CreatePost,
+  DeletePost,
   GetPostById,
   UpdatePost,
 } from '@controllers/post.controller';
@@ -11,5 +12,6 @@ const PostRoutes = Router();
 PostRoutes.post('/', AuthMiddleware, CreatePost);
 PostRoutes.get('/:id', AuthMiddleware, GetPostById);
 PostRoutes.put('/:id', AuthMiddleware, UpdatePost);
+PostRoutes.delete('/:id', AuthMiddleware, DeletePost);
 
 export default PostRoutes;

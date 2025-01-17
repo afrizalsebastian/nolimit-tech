@@ -21,3 +21,8 @@ export interface UpdatePostRequest {
   userId: number;
   content: string;
 }
+
+export interface DeletePostRequest {
+  id: number;
+  userId: number;
+}
