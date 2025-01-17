@@ -30,6 +30,14 @@ Run command below to migarate schema to database
 npx prisma migrate deploy
 ```
 
+## How to run Test
+
+Run command below
+
+```
+npm run test
+```
+
 ### In Dev Mode
 
 <hr>
@@ -63,10 +71,12 @@ Then run the project
 npm run start
 ```
 
-## How to run Test
+### In Docker
 
-Run command below
+<hr>
+Prerequisite have a <strong>docker</strong> <br>
+Run cammand below
 
 ```
-npm run test
+docker compose up -d
 ```
