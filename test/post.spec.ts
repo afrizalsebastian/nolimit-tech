@@ -106,34 +106,6 @@ describe('POST /api/v1/post/', () => {
 });
 
 describe('GET /api/v1/post/:id', () => {
-  it('should return error if unauthenticated', async () => {
-    const result = await supertest(app)
-      .get('/api/v1/post/1')
-      .set('Accept', 'application/json');
-
-    expect(result.statusCode).toBe(401);
-    expect(result.body.status).toBe(false);
-    expect(result.body.error).toBeDefined();
-  });
-
-  it('should return error if token invalid', async () => {
-    const claims: ClaimsPayload = {
-      id: 1,
-      email: 'user@mail.com',
-      name: 'user',
-    };
-    const token = CreateToken(claims);
-
-    const result = await supertest(app)
-      .get('/api/v1/post/1')
-      .set('Authorization', `Bearer a${token}`) //invalid token
-      .set('Accept', 'application/json');
-
-    expect(result.statusCode).toBe(401);
-    expect(result.body.status).toBe(false);
-    expect(result.body.error).toBeDefined();
-  });
-
   it('should return error if path validation error', async () => {
     const claims: ClaimsPayload = {
       id: 1,

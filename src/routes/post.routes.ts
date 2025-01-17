@@ -10,7 +10,7 @@ import { Router } from 'express';
 const PostRoutes = Router();
 
 PostRoutes.post('/', AuthMiddleware, CreatePost);
-PostRoutes.get('/:id', AuthMiddleware, GetPostById);
+PostRoutes.get('/:id', GetPostById);
 PostRoutes.put('/:id', AuthMiddleware, UpdatePost);
 PostRoutes.delete('/:id', AuthMiddleware, DeletePost);
 

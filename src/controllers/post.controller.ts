@@ -11,7 +11,7 @@ import {
   SGetPostById,
   SUpdatePost,
 } from '@services/post';
-import { NextFunction, Response } from 'express';
+import { NextFunction, Request, Response } from 'express';
 import { ZodError } from 'zod';
 
 export async function CreatePost(
@@ -38,7 +38,7 @@ export async function CreatePost(
 }
 
 export async function GetPostById(
-  req: AuthenticatedRequest,
+  req: Request,
   res: Response,
   next: NextFunction,
 ) {
