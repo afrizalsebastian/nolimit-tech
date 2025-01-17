@@ -8,6 +8,7 @@ import { BadRequestError } from '@middlewares/errorHandler.middleware';
 import {
   SCreatePost,
   SDeletePost,
+  SGetPost,
   SGetPostById,
   SUpdatePost,
 } from '@services/post';
@@ -34,6 +35,20 @@ export async function CreatePost(
       errorValue = new BadRequestError('Validation Error.');
     }
     next(errorValue);
+  }
+}
+
+export async function GetPost(req: Request, res: Response, next: NextFunction) {
+  try {
+    const query = req.query;
+    const result = await SGetPost(query);
+
+    res.status(200).json({
+      status: true,
+      data: result,
+    });
+  } catch (err) {
+    next(err);
   }
 }
 

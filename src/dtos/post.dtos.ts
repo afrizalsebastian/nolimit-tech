@@ -11,6 +11,12 @@ export interface PostResponse {
   updatedAt: Date;
 }
 
+export interface ListPostResponse {
+  posts: PostResponse[];
+  totalPage: number;
+  page: number;
+}
+
 export interface CreatePostRequest {
   userId: number;
   content: string;

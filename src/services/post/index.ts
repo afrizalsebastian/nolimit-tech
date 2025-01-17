@@ -3,6 +3,7 @@ import {
   AuthorPost,
   CreatePostRequest,
   DeletePostRequest,
+  ListPostResponse,
   PostResponse,
   UpdatePostRequest,
 } from '@dtos/post.dtos';
@@ -14,11 +15,14 @@ import { Post, User } from '@prisma/client';
 import {
   RCreatePost,
   RDeletePost,
+  RGetPost,
   RGetPostById,
+  RGetPostCount,
   RIsPostWithIdAndUserID,
   RUpdatePost,
 } from '@repositories/post.repositories';
 import { validate } from '@utils/dtosValidation.util';
+import { ExtractPostQuery, PostQuery } from '@utils/queryPost.util';
 import { PostValidation } from './validation';
 
 function toPostResposne(post: Post, user: User | null = null): PostResponse {
@@ -51,6 +55,21 @@ export async function SCreatePost(
 
   const { post, author } = await RCreatePost(validRequest);
   return toPostResposne(post, author);
+}
+
+export async function SGetPost(query: any): Promise<ListPostResponse> {
+  Logger.debug(`services.post.SGetPost`);
+
+  const extQuery: PostQuery = ExtractPostQuery(query);
+  const result = await RGetPost(extQuery);
+  const totalData = await RGetPostCount(extQuery);
+  const totalPage = Math.ceil(totalData / extQuery.rows);
+
+  return {
+    page: extQuery.page,
+    totalPage,
+    posts: result.map((it) => toPostResposne(it.post, it.author)),
+  };
 }
 
 export async function SGetPostById(id: number): Promise<PostResponse> {

@@ -5,6 +5,7 @@ import {
   UpdatePostRequest,
 } from '@dtos/post.dtos';
 import { Post, User } from '@prisma/client';
+import { PostQuery } from '@utils/queryPost.util';
 
 export interface PostWithAuthor {
   post: Post;
@@ -28,6 +29,30 @@ export async function RCreatePost(
     post: result,
     author: result.Author,
   };
+}
+
+export async function RGetPostCount(query: PostQuery): Promise<number> {
+  return await PrismaService.post.count({
+    where: query.where,
+    orderBy: query.orderBy,
+  });
+}
+
+export async function RGetPost(query: PostQuery): Promise<PostWithAuthor[]> {
+  const skip = (query.page - 1) * query.rows;
+  const result = await PrismaService.post.findMany({
+    where: query.where,
+    skip,
+    take: query.rows,
+    orderBy: query.orderBy,
+    include: {
+      Author: true,
+    },
+  });
+
+  return result.length > 0
+    ? result.map((it) => ({ post: it, author: it.Author }))
+    : [];
 }
 
 export async function RGetPostById(id: number): Promise<PostWithAuthor | null> {
